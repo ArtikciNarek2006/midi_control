@@ -1,4 +1,4 @@
-package com.example.midi_control;
+package com.midi_control;
 
 import android.content.Context;
 
