@@ -7,17 +7,11 @@
     android:orientation="vertical"
     tools:context=".MainMenu">
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="dasdasd"/>
-
-
     <Button
-        android:id="@+id/aaa"
+        android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="dasdasd"/>
+        android:text="open" />
 
+    
 </LinearLayout>

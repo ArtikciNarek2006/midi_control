@@ -1,4 +1,4 @@
-package com.midi_control;
+package com.midi_control.util;
 
 import android.util.Log;
 

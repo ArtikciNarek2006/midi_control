@@ -1,4 +1,4 @@
-package com.midi_control.settings_db.table;
+package com.midi_control.db.settings_db.table;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

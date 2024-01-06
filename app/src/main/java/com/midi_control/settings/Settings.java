@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Settings {
+    public static final Boolean auto_clear = true;
     public static final String[][] defaults = {
             {"theme", "dark"}
     };
@@ -51,6 +52,13 @@ public class Settings {
     }
     public void set_default_values() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if(auto_clear){
+            editor.clear();
+            editor.apply();
+            editor.commit();
+        }
+
         for (String[] aDefault : defaults)
             editor.putString(aDefault[0], aDefault[1]);
         editor.apply();

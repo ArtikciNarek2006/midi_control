@@ -1,11 +1,11 @@
-package com.midi_control.settings_db.dao;
+package com.midi_control.db.settings_db.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.midi_control.settings_db.table.GlobalSettings;
+import com.midi_control.db.settings_db.table.GlobalSettings;
 
 import java.util.List;
 
