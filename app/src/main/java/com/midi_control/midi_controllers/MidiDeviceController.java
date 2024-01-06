@@ -18,14 +18,12 @@ import java.io.IOException;
 
 public class MidiDeviceController {
     private static MidiDeviceController mInstance;
-    private static Boolean is_midi_supported = false;
-
     public byte[] notes;
+
+    public String manufacturer;
     Context ctx;
     public MidiManager midiManager;
     public MidiDeviceInfo[] midiDeviceInfos;
-
-//    MidiInputPort inputPort = device.openInputPort(index); // to control midi device
 
     public void openOutput(MidiDeviceInfo info, int index) {
         ML.w("MIDI openPort(info:" + String.valueOf(info) + ", index:" + String.valueOf(index) + ");");
@@ -61,7 +59,10 @@ public class MidiDeviceController {
                     }
 
                     MidiOutputPort outputPort = device.openOutputPort(index);
-                    outputPort.connect(new MyReceiver());
+                    if(outputPort != null)
+                        outputPort.connect(new MyReceiver());
+                    else{
+                    }
                 }
             }
         }, new Handler(Looper.getMainLooper()));
@@ -99,11 +100,9 @@ public class MidiDeviceController {
     private MidiDeviceController(Context ctx) {
         this.ctx = ctx;
         if (ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_MIDI)) {
-            is_midi_supported = true;
             notes = new byte[127];
             init_midi();
         } else {
-            is_midi_supported = false;
             ML.e("MIDI RUNTIME NOT SUPPORTED");
         }
     }
