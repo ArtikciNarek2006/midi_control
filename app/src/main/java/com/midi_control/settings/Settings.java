@@ -74,8 +74,6 @@ public class Settings {
         }
     }
 
-
-    // single tone
     private static Settings mInstance;
 
     public static synchronized Settings getInstance(Context mCtx) {

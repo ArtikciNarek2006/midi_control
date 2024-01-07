@@ -2,10 +2,6 @@ package com.midi_control;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.media.midi.MidiDeviceInfo;
-import android.media.midi.MidiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,9 +25,6 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        Button btn = findViewById(R.id.btn);
-
-
-        mdc = MidiDeviceController.getInstance(this);
+//        mdc = MidiDeviceController.getInstance(this);
     }
 }

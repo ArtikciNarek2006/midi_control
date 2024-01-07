@@ -4,13 +4,17 @@ package com.midi_control.midi_controllers;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.media.midi.MidiDevice;
 import android.media.midi.MidiDeviceInfo;
 import android.media.midi.MidiManager;
+import android.media.midi.MidiReceiver;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 
 import com.midi_control.util.ML;
+
+import java.io.IOException;
 
 public class MidiServiceClient {
     public static final String MIDI_LOG_TAG = "MidiServiceClient";
@@ -31,6 +35,14 @@ public class MidiServiceClient {
     private MidiDeviceInfo.PortInfo[] device_inputPorts, device_outputPorts;
     private int curr_inputPort_index, curr_outputPort_index;
     private Boolean is_midi_supported;
+
+    private class MyMidiReceiver extends MidiReceiver {
+        public void onSend(byte[] data, int offset,
+                           int count, long timestamp) throws IOException {
+            // parse MIDI or whatever
+            notes[data[2]] = data[3];
+        }
+    }
 
 
     private void getCurrentDeviceProperties() {
@@ -119,6 +131,16 @@ public class MidiServiceClient {
         this.getAllInputOutputPorts(); // port count porperties are inited in there
 
         this.logCurrentDeviceProperties();
+
+        if(this.device_type == MidiDeviceInfo.TYPE_USB) {
+//            midiManager.openDevice(MidiDeviceInfo[]);
+        } else if (this.device_type == MidiDeviceInfo.TYPE_VIRTUAL) {
+            // TODO: open virtual midi device;
+        } else if (this.device_type == MidiDeviceInfo.TYPE_BLUETOOTH) {
+            // TODO: open bluetooth midi device;
+        }else{
+            ML.err(MIDI_LOG_TAG, "connectDevice(): Unknown midi device type.");
+        }
 
         this.connectCurrentDeviceOutputToClientInput();
     }
