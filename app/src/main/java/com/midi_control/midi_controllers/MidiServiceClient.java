@@ -19,7 +19,7 @@ import com.midi_control.util.ML;
 
 import java.io.IOException;
 
-public class MidiServiceClient {
+public class MidiServiceClient implements MidiSource {
     public static final String MIDI_LOG_TAG = "MidiServiceClient";
 
     // public for client

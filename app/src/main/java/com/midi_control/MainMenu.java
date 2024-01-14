@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.midi_control.fragments.MidiVisualizer;
 import com.midi_control.midi_controllers.MidiDeviceController;
 import com.midi_control.settings.Settings;
 import com.midi_control.util.ML;
