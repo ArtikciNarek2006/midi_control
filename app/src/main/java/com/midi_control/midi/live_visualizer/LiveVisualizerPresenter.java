@@ -9,7 +9,7 @@ import com.midi_control.utils.MyBuffer;
 
 public class LiveVisualizerPresenter implements MidiVisualizerContract.Presenter, LiveVisualizerContract.LiveVisPresenter {
     public static final String TAG = "LiveVisualizerPresenter";
-    public static int MIDI_MESSAGES_BUFFER_LENGTH = 1600;
+    public static int MIDI_MESSAGES_BUFFER_LENGTH = 1800;
 
     public MyBuffer<MidiNote> midiNotesBuffer = new MyBuffer<>(MIDI_MESSAGES_BUFFER_LENGTH);
 
