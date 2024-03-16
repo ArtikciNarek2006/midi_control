@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MidiControl"
 include(":app")
- 
+include(":nativelib")

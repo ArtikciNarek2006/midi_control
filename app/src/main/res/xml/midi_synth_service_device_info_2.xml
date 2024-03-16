@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<devices>
+    <device manufacturer="MidiControl" product="MidiSynth_2">
+        <input-port name="Input" />
+        <!-- TODO       <output-port name="Duplicate Output" />-->
+    </device>
+</devices>

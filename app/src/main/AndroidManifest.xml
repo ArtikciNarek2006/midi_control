@@ -32,17 +32,30 @@
 
 <!--        TODO: Create midi synth service -->
         <!--  MidiSynthService definition  -->
-<!--        <service-->
-<!--            android:name="com.midi_control.midi.services.MidiSynthService"-->
-<!--            android:exported="true"-->
-<!--            android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.media.midi.MidiDeviceService" />-->
-<!--            </intent-filter>-->
-<!--            <meta-data-->
-<!--                android:name="android.media.midi.MidiDeviceService"-->
-<!--                android:resource="@xml/midi_synth_service_device_info" />-->
-<!--        </service>-->
+        <service
+            android:name="com.midi_control.midi.services.MidiSynthService"
+            android:exported="true"
+            android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">
+            <intent-filter>
+                <action android:name="android.media.midi.MidiDeviceService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.media.midi.MidiDeviceService"
+                android:resource="@xml/midi_synth_service_device_info" />
+        </service>
+
+        <!--  MidiSynthService2 definition  -->
+        <service
+            android:name="com.midi_control.midi.services.MidiSynthService2"
+            android:exported="true"
+            android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">
+            <intent-filter>
+                <action android:name="android.media.midi.MidiDeviceService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.media.midi.MidiDeviceService"
+                android:resource="@xml/midi_synth_service_device_info_2" />
+        </service>
 
         <!--  MidiLiveVisualizerService definition  -->
         <service

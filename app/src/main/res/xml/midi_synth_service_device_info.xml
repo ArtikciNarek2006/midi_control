@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<devices xmlns:android="http://schemas.android.com/apk/res/android">
+<devices>
     <device manufacturer="MidiControl" product="MidiSynth">
         <input-port name="Input" />
-        <output-port name="Duplicate Output" />
+<!-- TODO       <output-port name="Duplicate Output" />-->
     </device>
 </devices>
