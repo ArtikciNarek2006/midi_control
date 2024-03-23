@@ -35,7 +35,7 @@ public class MidiLiveVisualizerService extends MidiDeviceService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(getApplicationContext(), "Services Has Been Started!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Midi Live Visualizer Services has been started!", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 

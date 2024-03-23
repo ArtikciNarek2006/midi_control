@@ -18,13 +18,9 @@ public interface MidiVisualizerContract {
         void setSlideSpeed(float pxPerSec);
         float getSlideSpeed(); // returns pxPerSec
 
-        void setTranslate(MyMath.Cords<Float> cords);
-        MyMath.Cords<Float> getTranslate();
 
-        void setZoom(MyMath.Cords<Float> coefficients);
-        MyMath.Cords<Float> getZoom();
-
-
+        void setMinMaxPitches(MyMath.Cords<Byte> coefficients);
+        MyMath.Cords<Byte> getMinMaxPitches();
         // for other
     }
 

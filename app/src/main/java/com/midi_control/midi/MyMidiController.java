@@ -13,7 +13,9 @@ import com.midi_control.midi.visualizer.MidiVisualizerView;
 import com.midi_control.utils.ML;
 import com.midi_control.utils.MidiUtils;
 
-public class MyMidiController {
+import java.io.Serializable;
+
+public class MyMidiController implements Serializable {
     public static final String TAG = "MyMidiManager";
     private static MyMidiController instance;
 

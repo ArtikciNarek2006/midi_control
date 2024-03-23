@@ -36,7 +36,14 @@ public class MidiNoteStatus {
             return null;
         }
 
-        return new MidiNoteStatus(is_on, channel, msg.data[msg.offset + 1], msg.data[msg.offset + 2], msg.timestamp, msg.java_timestamp);
+        byte pitch = msg.data[msg.offset + 1], velocity = msg.data[msg.offset + 2];
+
+        // fix for bad keyboard which dont send STATUS_OFF
+        if ((velocity == 0) && is_on) {
+            is_on = false;
+        }
+
+        return new MidiNoteStatus(is_on, channel, pitch, velocity, msg.timestamp, msg.java_timestamp);
     }
 
     public MidiNoteStatus(boolean isOn, byte channel, byte pitch, byte velocity, long timestamp, long java_timestamp) {

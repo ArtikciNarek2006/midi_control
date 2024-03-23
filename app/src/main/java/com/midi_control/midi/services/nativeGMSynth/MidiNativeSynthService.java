@@ -1,6 +1,6 @@
 // source https://github.com/pedrolcl/android/tree/master/NativeGMSynth
 
-package com.midi_control.midi.services;
+package com.midi_control.midi.services.nativeGMSynth;
 
 import android.media.midi.MidiDeviceService;
 import android.media.midi.MidiDeviceStatus;
@@ -8,7 +8,7 @@ import android.media.midi.MidiReceiver;
 
 import com.midi_control.utils.ML;
 
-public class MidiSynthService2 extends MidiDeviceService {
+public class MidiNativeSynthService extends MidiDeviceService {
     private static final String TAG = "MidiSynthService2";
     private MIDISynth mSynthEngine = null;
     private boolean mSynthStarted = false;

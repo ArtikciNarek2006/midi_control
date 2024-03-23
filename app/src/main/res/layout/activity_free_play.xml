@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.FreePlayActivity"
+    android:weightSum="10"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/status_bar_height"
+        android:background="@color/bg_accent_1"
+        android:orientation="horizontal"
+        android:translationZ="@dimen/fab_margin"
+        tools:ignore="MissingConstraints">
+
+        <ImageButton
+            android:id="@+id/main_menu_btn"
+            android:layout_width="@dimen/status_bar_height"
+            android:layout_height="@dimen/status_bar_height"
+            android:background="@drawable/baseline_arrow_circle_left_24"
+            android:backgroundTint="@color/bg_accent_5" />
+    </LinearLayout>
+
+    <com.midi_control.midi.visualizer.MidiVisualizerView
+        android:layout_weight="7"
+        android:id="@+id/visualizerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/bg_accent_2" />
+
+<!--    <com.mobileer.miditools.MusicKeyboardView-->
+<!--        android:layout_weight="3"-->
+<!--        android:id="@+id/midi_keyboard"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp" />-->
+    <com.midi_control.midi.keyboard.MidiKeyboardView
+        android:layout_weight="3"
+        android:id="@+id/midi_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+</LinearLayout>

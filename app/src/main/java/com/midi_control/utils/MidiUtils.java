@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 
 import com.mobileer.miditools.MidiConstants;
+import com.mobileer.miditools.MusicKeyboardView;
 
 public class MidiUtils {
     public static final String TAG = "MidiUtils";
@@ -20,6 +21,34 @@ public class MidiUtils {
 
     public static byte getCommand(byte status_code){
         return (byte) (status_code & MidiConstants.STATUS_COMMAND_MASK);
+    }
+
+    public static boolean isBlackKey(byte pitch){
+        final boolean[] NOTE_IN_OCTAVE_IS_BLACK = {
+                false, true,
+                false, true,
+                false, false, true,
+                false, true,
+                false, true,
+                false
+        };
+        return NOTE_IN_OCTAVE_IS_BLACK[pitch % 12];
+    }
+
+
+    /**
+     * @param min_pitch inclusive
+     * @param max_pitch inclusive
+     * @return count of white notes
+     */
+    public static int countWhiteKeys(byte min_pitch, byte max_pitch){
+        int count = 0;
+        for (byte i = min_pitch; i <= max_pitch; i++) {
+            if (!isBlackKey(i)){
+                count++;
+            }
+        }
+        return count;
     }
 
     @NonNull

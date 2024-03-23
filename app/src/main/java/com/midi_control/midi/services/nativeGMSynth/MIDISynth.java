@@ -1,6 +1,8 @@
-package com.midi_control.midi.services;
+package com.midi_control.midi.services.nativeGMSynth;
 
 import android.media.midi.MidiReceiver;
+
+import com.midi_control.utils.ML;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -8,6 +10,7 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 public class MIDISynth extends MidiReceiver {
+    public static final String TAG = "nativeGMSynth.MIDISynth";
 
     static {
         System.loadLibrary("midisynth");
@@ -104,8 +107,7 @@ public class MIDISynth extends MidiReceiver {
     }
 
     @Override
-    public void onSend(byte[] msg, int offset, int count, long timestamp)
-            throws IOException {
+    public void onSend(byte[] msg, int offset, int count, long timestamp) throws IOException {
         write(Arrays.copyOfRange(msg, offset, offset + count));
     }
 

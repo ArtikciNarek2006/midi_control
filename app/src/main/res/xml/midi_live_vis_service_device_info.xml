@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<devices xmlns:android="http://schemas.android.com/apk/res/android">
-    <device manufacturer="MidiControl" product="Live Visualizer">
+<devices>
+    <device
+        manufacturer="MidiControl"
+        product="Live Visualizer">
         <input-port name="Input" />
     </device>
 </devices>

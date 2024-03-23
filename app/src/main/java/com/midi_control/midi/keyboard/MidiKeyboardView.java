@@ -1,20 +1,4 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.mobileer.miditools;
+package com.midi_control.midi.keyboard;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -23,24 +7,21 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.midi_control.utils.ML;
+import com.mobileer.miditools.MidiConstants;
+import com.mobileer.miditools.MusicKeyboardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * View that displays a traditional piano style keyboard. Finger presses are reported to a
- * MusicKeyListener. Keys that pressed are highlighted. Running a finger along the top of the
- * keyboard will only hit black keys. Running a finger along the bottom of the keyboard will only
- * hit white keys.
- */
-public class MusicKeyboardView extends View {
-    private static final String TAG = "MusicKeyboardView";
+public class MidiKeyboardView extends View {
+    private static final String TAG = "MidiKeyboardView";
     // Adjust proportions of the keys.
-    private static final int WHITE_KEY_GAP = 10;
     private static final int PITCH_MIDDLE_C = 60;
+    private static final int WHITE_KEY_GAP = 10;
     private static final int NOTES_PER_OCTAVE = 12;
     private static final int[] WHITE_KEY_OFFSETS = {
             0, 2, 4, 5, 7, 9, 11
@@ -102,20 +83,45 @@ public class MusicKeyboardView extends View {
     private HashMap<Integer, Integer> mFingerMap = new HashMap<Integer, Integer>();
     // Note number for the left most key.
     private int mLowestPitch = PITCH_MIDDLE_C - NOTES_PER_OCTAVE;
-    private ArrayList<MusicKeyListener> mListeners = new ArrayList<MusicKeyListener>();
+    private ArrayList<com.mobileer.miditools.MusicKeyboardView.MusicKeyListener> mListeners = new ArrayList<com.mobileer.miditools.MusicKeyboardView.MusicKeyListener>();
 
-    /** Implement this to receive keyboard events. */
+    private MidiKeyboardService mkService;
+
+    /**
+     * Implement this to receive keyboard events.
+     */
     public interface MusicKeyListener {
-        /** This will be called when a key is pressed. */
+        /**
+         * This will be called when a key is pressed.
+         */
         public void onKeyDown(int keyIndex);
 
-        /** This will be called when a key is pressed. */
+        /**
+         * This will be called when a key is pressed.
+         */
         public void onKeyUp(int keyIndex);
     }
 
-    public MusicKeyboardView(Context context, AttributeSet attrs) {
+    public MidiKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+        // add to listeners MidiKeyboardService
+        mkService = MidiKeyboardService.getInstance();
+        if (mkService == null) {
+            ML.err(TAG, "Constructor(): MidiKeyboardService.getInstance() is null");
+        } else {
+            this.addMusicKeyListener(new MusicKeyboardView.MusicKeyListener() {
+                @Override
+                public void onKeyDown(int keyIndex) {
+                    mkService.broadcast(MidiConstants.STATUS_NOTE_ON, (byte) keyIndex);
+                }
+
+                @Override
+                public void onKeyUp(int keyIndex) {
+                    mkService.broadcast(MidiConstants.STATUS_NOTE_OFF, (byte) keyIndex);
+                }
+            });
+        }
     }
 
     void init() {
@@ -172,7 +178,9 @@ public class MusicKeyboardView extends View {
             float x = mWhiteKeyWidth * whiteKeyIndex;
             int pitch = mLowestPitch + i;
             int note = pitch % NOTES_PER_OCTAVE;
+
             if (NOTE_IN_OCTAVE_IS_BLACK[note]) {
+
                 int leftCompl = BLACK_KEY_LEFT_COMPLEMENTS[mLowestPitch % 12];
                 float offset = BLACK_KEY_OFFSET_FACTOR
                         * BLACK_KEY_HORIZONTAL_OFFSETS[(blackKeyIndex + leftCompl) % 5];
@@ -237,7 +245,7 @@ public class MusicKeyboardView extends View {
         // Some devices can return negative x or y, which can cause an array exception.
         x = Math.max(x, 0.0f);
         y = Math.max(y, 0.0f);
-        boolean handled =  false;
+        boolean handled = false;
         switch (action) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -324,7 +332,7 @@ public class MusicKeyboardView extends View {
     }
 
     private void fireKeyDown(int pitch) {
-        for (MusicKeyListener listener : mListeners) {
+        for (com.mobileer.miditools.MusicKeyboardView.MusicKeyListener listener : mListeners) {
             listener.onKeyDown(pitch);
         }
         mNotesOnByPitch[pitch] = true;
@@ -332,7 +340,7 @@ public class MusicKeyboardView extends View {
     }
 
     private void fireKeyUp(int pitch) {
-        for (MusicKeyListener listener : mListeners) {
+        for (com.mobileer.miditools.MusicKeyboardView.MusicKeyListener listener : mListeners) {
             listener.onKeyUp(pitch);
         }
         mNotesOnByPitch[pitch] = false;
@@ -384,11 +392,11 @@ public class MusicKeyboardView extends View {
         return result;
     }
 
-    public void addMusicKeyListener(MusicKeyListener musicKeyListener) {
+    public void addMusicKeyListener(com.mobileer.miditools.MusicKeyboardView.MusicKeyListener musicKeyListener) {
         mListeners.add(musicKeyListener);
     }
 
-    public void removeMusicKeyListener(MusicKeyListener musicKeyListener) {
+    public void removeMusicKeyListener(com.mobileer.miditools.MusicKeyboardView.MusicKeyListener musicKeyListener) {
         mListeners.remove(musicKeyListener);
     }
 
@@ -402,33 +410,5 @@ public class MusicKeyboardView extends View {
         }
         mLowestPitch = pitch;
         postInvalidate();
-    }
-
-    public int getLowestPitch() {
-        return mLowestPitch;
-    }
-
-    /**
-     * Set the number of white keys in portrait mode.
-     */
-    public void setNumPortraitKeys(int numPortraitKeys) {
-        mNumPortraitKeys = numPortraitKeys;
-        postInvalidate();
-    }
-
-    public int getNumPortraitKeys() {
-        return mNumPortraitKeys;
-    }
-
-    /**
-     * Set the number of white keys in landscape mode.
-     */
-    public void setNumLandscapeKeys(int numLandscapeKeys) {
-        mNumLandscapeKeys = numLandscapeKeys;
-        postInvalidate();
-    }
-
-    public int getNumLandscapeKeys() {
-        return mNumLandscapeKeys;
     }
 }

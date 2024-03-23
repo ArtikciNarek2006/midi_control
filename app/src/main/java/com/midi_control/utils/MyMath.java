@@ -13,5 +13,9 @@ public class MyMath {
         }
     }
 
+    public static byte random(byte min, byte max){
+        return  (byte) (Math.random() * (byte) (max - min) + min);
+    }
+
 
 }

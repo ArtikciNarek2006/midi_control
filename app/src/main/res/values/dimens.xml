@@ -1,0 +1,10 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="titles_margin">10dp</dimen>
+    <dimen name="titles_font_size">25dp</dimen>
+
+    <dimen name="status_bar_height">35dp</dimen>
+
+    <dimen name="keyboard_height">120dp</dimen>
+</resources>

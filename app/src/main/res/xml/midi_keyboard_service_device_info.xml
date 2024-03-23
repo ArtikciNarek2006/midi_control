@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<devices>
+    <device
+        manufacturer="MidiControl"
+        product="Keyboard">
+<!--        <input-port name="Input" />-->
+            <output-port name="Output" />
+    </device>
+</devices>

@@ -54,7 +54,7 @@ static void process(void *context, int sample_rate, int buffer_frames,
     }
 }
 
-JNIEXPORT jobject JNICALL Java_com_midi_1control_midi_services_MIDISynth_open(JNIEnv *env, jclass clazz)
+JNIEXPORT jobject JNICALL Java_com_midi_1control_midi_services_nativeGMSynth_MIDISynth_open(JNIEnv *env, jclass clazz)
 {
   EAS_RESULT eas_res;
   EAS_DATA_HANDLE dataHandle;
@@ -100,7 +100,7 @@ JNIEXPORT jobject JNICALL Java_com_midi_1control_midi_services_MIDISynth_open(JN
   return (*env)->NewDirectByteBuffer(env, (void *) lc, sizeof(struct LibraryContext));
 }
 
-JNIEXPORT void JNICALL Java_com_midi_1control_midi_services_MIDISynth_close(JNIEnv *env, jclass clazz, jobject ctx)
+JNIEXPORT void JNICALL Java_com_midi_1control_midi_services_nativeGMSynth_MIDISynth_close(JNIEnv *env, jclass clazz, jobject ctx)
 {
   struct LibraryContext *lc = (struct LibraryContext *) (*env)->GetDirectBufferAddress(env, ctx);
   EAS_RESULT eas_res;
@@ -120,25 +120,25 @@ JNIEXPORT void JNICALL Java_com_midi_1control_midi_services_MIDISynth_close(JNIE
   free(lc);
 }
 
-JNIEXPORT jint JNICALL Java_com_midi_1control_midi_services_MIDISynth_start(JNIEnv *env, jclass clazz, jobject ctx)
+JNIEXPORT jint JNICALL Java_com_midi_1control_midi_services_nativeGMSynth_MIDISynth_start(JNIEnv *env, jclass clazz, jobject ctx)
 {
   struct LibraryContext *lc = (struct LibraryContext *) (*env)->GetDirectBufferAddress(env, ctx);
   return opensl_start(lc->os);
 }
 
-JNIEXPORT void JNICALL Java_com_midi_1control_midi_services_MIDISynth_stop(JNIEnv *env, jclass clazz, jobject ctx)
+JNIEXPORT void JNICALL Java_com_midi_1control_midi_services_nativeGMSynth_MIDISynth_stop(JNIEnv *env, jclass clazz, jobject ctx)
 {
   struct LibraryContext *lc = (struct LibraryContext *) (*env)->GetDirectBufferAddress(env, ctx);
   opensl_pause(lc->os);
 }
 
-JNIEXPORT jboolean JNICALL Java_com_midi_1control_midi_services_MIDISynth_isRunning(JNIEnv *env, jclass clazz, jobject ctx)
+JNIEXPORT jboolean JNICALL Java_com_midi_1control_midi_services_nativeGMSynth_MIDISynth_isRunning(JNIEnv *env, jclass clazz, jobject ctx)
 {
   struct LibraryContext *lc = (struct LibraryContext *) (*env)->GetDirectBufferAddress(env, ctx);
   return opensl_is_running(lc->os);
 }
 
-JNIEXPORT jboolean JNICALL Java_com_midi_1control_midi_services_MIDISynth_write(JNIEnv *env, jclass clazz, jobject ctx, jbyteArray ba)
+JNIEXPORT jboolean JNICALL Java_com_midi_1control_midi_services_nativeGMSynth_MIDISynth_write(JNIEnv *env, jclass clazz, jobject ctx, jbyteArray ba)
 {
     EAS_RESULT eas_res = EAS_ERROR_ALREADY_STOPPED;
     EAS_I32 count;
