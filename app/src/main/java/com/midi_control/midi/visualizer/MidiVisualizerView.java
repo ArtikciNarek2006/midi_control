@@ -8,6 +8,8 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -21,6 +23,7 @@ import com.midi_control.utils.MyBuffer;
 import com.midi_control.utils.MyMath;
 import com.midi_control.utils.MyUtils;
 import com.mobileer.miditools.MidiConstants;
+
 
 public class MidiVisualizerView extends View implements MidiVisualizerContract.VisualizerView {
     public static final String TAG = "MidiVisualizerView";
@@ -42,20 +45,18 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
         }
     }
 
-    public static float DEFAULT_SLIDE_SPEED = 250f;
+    public static float DEFAULT_SLIDE_SPEED = 350f;
     public static FlowDirection DEFAULT_FLOW_DIRECTION = FlowDirection.UP;
-    public static MyMath.Cords<Byte> DEFAULT_MIN_MAX_PITCH = new MyMath.Cords<>((byte) 36, (byte) 96);
+    public static MyMath.Cords<Byte> DEFAULT_MIN_MAX_PITCH = new MyMath.Cords<>((byte) 48, (byte) 108);
 
     private static final float BLACK_KEY_WIDTH_FACTOR = 0.6f, BLACK_KEY_OFFSET_FACTOR = 0.18f;
-    private static final int WHITE_KEY_GAP = 10, HALF_KEY_GAP = 5, NOTES_PER_OCTAVE = 12, WHITE_NOTES_PER_OCTAVE = 7;
+    private static final
+    int WHITE_KEY_GAP = 10, HALF_KEY_GAP = 5, NOTES_PER_OCTAVE = 12, WHITE_NOTES_PER_OCTAVE = 7;
     private static final int[] BLACK_KEY_HORIZONTAL_OFFSETS = {
             -1, 1, -1, 0, 1
     };
     private static final int[] WHITE_KEY_LEFT_COMPLEMENTS = {
             0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6
-    };
-    private static final int[] BLACK_KEY_LEFT_COMPLEMENTS = {
-            0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5
     };
     private static final int[] BLACK_KEY_INDEX = {
             15, 0, 15, 1, 15, 15, 2, 15, 3, 15, 4, 15
@@ -71,9 +72,14 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
     private float mWhiteKeyWidth = 1, mBlackKeyWidth = 1;
 
 
-    private Paint redPaint;
-    private Paint[] whiteNotesPaint_ch = new Paint[MidiConstants.MAX_CHANNELS]; // GM standard channel count is 16 :
-    private Paint[] blackNotesPaint_ch = new Paint[whiteNotesPaint_ch.length]; // WARN: if in some case length changed refactor init_draw Paints generation for block
+    private int note_radius = 1; // TODO: get radius from out
+    private final float note_radius_factor = 0.25f; // factor * white_note_width
+    private final RectF note_rect = new RectF();
+    private float[] note_radius_top = new float[]{note_radius, note_radius, note_radius, note_radius, 0, 0, 0, 0};
+    private float[] note_radius_all = new float[]{note_radius, note_radius, note_radius, note_radius, note_radius, note_radius, note_radius, note_radius};
+    private final Path note_path = new Path();
+    private final Paint[] whiteNotesPaint_ch = new Paint[MidiConstants.MAX_CHANNELS]; // GM standard channel count is 16 :
+    private final Paint[] blackNotesPaint_ch = new Paint[whiteNotesPaint_ch.length]; // WARN: if in some case length changed refactor init_draw Paints generation for block
     private long draw_timestamp_last, draw_timestamp_start, last_buffer_timestamp = 0;
     private float canvas_h = 1, canvas_w = 1;
 
@@ -97,11 +103,8 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
     }
 
     private void init_draw() {
-        redPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        redPaint.setColor(Color.rgb(255, 0, 0));
-
         int length = whiteNotesPaint_ch.length / 2;
-        float h_step = 360f / length, h = 135f, s1 = 80f, vWh = 85f, s2 = 50f, vBl = 65f;
+        float h_step = 360f / length, h = 135f, s1 = 0.80f, vWh = 0.95f, s2 = 0.50f, vBl = 0.65f;
         for (int i = 0; i < length; i++) {
             whiteNotesPaint_ch[i] = new Paint(Paint.ANTI_ALIAS_FLAG);
             whiteNotesPaint_ch[i + length] = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -116,29 +119,34 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
             blackNotesPaint_ch[i + length].setColor(Color.HSVToColor(new float[]{h, s2, vBl}));
             h = (h + h_step) % 360f;
         }
+
+        ML.log(TAG, "init_draw(): whiteNotesPaint_ch: " + MyUtils.paintArray_toString(whiteNotesPaint_ch));
+        ML.log(TAG, "init_draw(): blackNotesPaint_ch: " + MyUtils.paintArray_toString(blackNotesPaint_ch));
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         // Account for padding.
-        float xPad = (float) (getPaddingLeft() + getPaddingRight());
-        float yPad = (float) (getPaddingTop() + getPaddingBottom());
+//        float xPad = (float) (getPaddingLeft() + getPaddingRight());
+//        float yPad = (float) (getPaddingTop() + getPaddingBottom());
         canvas_w = w;
         canvas_h = h;
 
         mWhiteKeyWidth = canvas_w / countWhiteKeys(minMaxPitches.x, minMaxPitches.y);
         mBlackKeyWidth = mWhiteKeyWidth * BLACK_KEY_WIDTH_FACTOR;
+
+        note_radius = (int) (mWhiteKeyWidth * note_radius_factor);
+        note_radius_top = new float[]{note_radius, note_radius, note_radius, note_radius, 0, 0, 0, 0};
+        note_radius_all = new float[]{note_radius, note_radius, note_radius, note_radius, note_radius, note_radius, note_radius, note_radius};
     }
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
-//        canvas.drawRect(0f, 0f, (float) canvas_w, (float) canvas_h, bg_paint);
-
         long current_timestamp = System.nanoTime();
-        float frame_time_s = (float) (current_timestamp - draw_timestamp_last) / MyMath.NANOS_PER_SECOND;
+//        float frame_time_s = (float) (current_timestamp - draw_timestamp_last) / MyMath.NANOS_PER_SECOND;
         draw_timestamp_last = System.nanoTime();
 
         if (notes_buffer != null) {
@@ -160,18 +168,31 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
                     float x1 = (byte) (draw_pitch / NOTES_PER_OCTAVE) * mWhiteKeyWidth * WHITE_NOTES_PER_OCTAVE, x2;
                     draw_pitch %= NOTES_PER_OCTAVE;
 
+                    Paint note_paint;
                     x1 += WHITE_KEY_LEFT_COMPLEMENTS[draw_pitch] * mWhiteKeyWidth;
-
                     if (isBlackKey(note.pitch)) {
                         float offset = BLACK_KEY_OFFSET_FACTOR * BLACK_KEY_HORIZONTAL_OFFSETS[BLACK_KEY_INDEX[draw_pitch]];
                         x1 = x1 - mBlackKeyWidth * (0.5f - offset);
                         x2 = x1 + mBlackKeyWidth;
-                        canvas.drawRect(x1, y1, x2, y2, blackNotesPaint_ch[note.channel]);
+
+                        note_paint = blackNotesPaint_ch[note.channel];
+//                        canvas.drawRect(x1, y1, x2, y2, blackNotesPaint_ch[note.channel]);
                     } else {
                         x1 += HALF_KEY_GAP;
                         x2 = x1 + mWhiteKeyWidth - WHITE_KEY_GAP;
-                        canvas.drawRect(x1, y1, x2, y2, whiteNotesPaint_ch[note.channel]);
+
+                        note_paint = whiteNotesPaint_ch[note.channel];
+//                        canvas.drawRect(x1, y1, x2, y2, whiteNotesPaint_ch[note.channel]);
                     }
+                    note_rect.set(x1, y1, x2, y2);
+                    note_path.reset();
+                    if (note.local_duration == null) {
+                        note_path.addRoundRect(note_rect, note_radius_top, Path.Direction.CW);
+                    } else {
+                        note_path.addRoundRect(note_rect, note_radius_all, Path.Direction.CW);
+                    }
+                    canvas.drawPath(note_path, note_paint);
+
 
 //                    ML.log(TAG, "mWhiteKeyWidth = " + mWhiteKeyWidth + " pitch= " + note.pitch + " drawRect(" + x1 + " , " + y1 + ", " + x2 + ", " + y2 + ")");
 //                    ML.log(TAG, "pitch= " + note.pitch + " is_white:" + isBlackKey(note.pitch));
@@ -179,8 +200,8 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
             }
         }
 
-//        this.invalidate();
-        MyUtils.setTimeout(this::invalidate, 20);
+        this.invalidate();
+//        MyUtils.setTimeout(this::invalidate, 20);
     }
 
     // interface implements

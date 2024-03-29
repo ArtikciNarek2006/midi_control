@@ -2,7 +2,8 @@
 <devices>
     <device
         manufacturer="MidiControl"
-        product="MidiSynth">
+        product="Synthesizer"
+        name = "MidiSynth">
         <input-port name="Input" />
         <!-- TODO       <output-port name="Duplicate Output" />-->
     </device>

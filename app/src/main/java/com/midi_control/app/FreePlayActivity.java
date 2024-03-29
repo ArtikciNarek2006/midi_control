@@ -1,53 +1,38 @@
 package com.midi_control.app;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.midi_control.R;
 import com.midi_control.databinding.ActivityFreePlayBinding;
 import com.midi_control.midi.MyMidiController;
-import com.midi_control.midi.visualizer.MidiVisualizerView;
 
 public class FreePlayActivity extends AppCompatActivity {
 
     public MyMidiController myMidiController;
-    private ActivityFreePlayBinding binding;
-    private ImageButton main_menu_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityFreePlayBinding.inflate(getLayoutInflater());
+        com.midi_control.databinding.ActivityFreePlayBinding binding = ActivityFreePlayBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        main_menu_btn = findViewById(R.id.main_menu_btn);
+        ImageButton main_menu_btn = findViewById(R.id.main_menu_btn);
 
         myMidiController = MyMidiController.getInstance(this);
         if(myMidiController != null){
-            myMidiController.setVisView(this, R.id.visualizerView);
+            myMidiController.setState(MyMidiController.State.LiveVisualizer, this, R.id.visualizerView);
         }
 
 
-        main_menu_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        main_menu_btn.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 

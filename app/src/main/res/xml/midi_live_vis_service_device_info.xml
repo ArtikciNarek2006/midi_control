@@ -2,7 +2,8 @@
 <devices>
     <device
         manufacturer="MidiControl"
-        product="Live Visualizer">
+        product="Visualizer"
+        name="Live Visualizer">
         <input-port name="Input" />
     </device>
 </devices>

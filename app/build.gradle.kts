@@ -12,11 +12,11 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        externalNativeBuild {
-            ndkBuild {
-                cppFlags += ""
-            }
-        }
+//        externalNativeBuild {
+//            ndkBuild {
+//                cppFlags += ""
+//            }
+//        }
     }
 
     buildTypes {
@@ -32,11 +32,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    externalNativeBuild {
-        ndkBuild {
-            path = file("src/main/jni/Android.mk")
-        }
-    }
+//    externalNativeBuild {
+//        ndkBuild {
+//            path = file("src/main/jni/Android.mk")
+//        }
+//    }
     buildFeatures {
         viewBinding = true
     }
@@ -48,8 +48,6 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-//    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
-//    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("androidx.preference:preference:1.2.1")

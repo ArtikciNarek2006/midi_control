@@ -16,16 +16,16 @@
 
 package com.mobileer.miditools;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ import java.util.HashMap;
 public class MusicKeyboardView extends View {
     private static final String TAG = "MusicKeyboardView";
     // Adjust proportions of the keys.
-    private static final int WHITE_KEY_GAP = 10;
+    private static final float WHITE_KEY_GAP = 10;
     private static final int PITCH_MIDDLE_C = 60;
     private static final int NOTES_PER_OCTAVE = 12;
     private static final int[] WHITE_KEY_OFFSETS = {
@@ -89,7 +89,7 @@ public class MusicKeyboardView extends View {
     private Rect[] mBlackKeyRectangles;
 
     // Keyboard state
-    private boolean[] mNotesOnByPitch = new boolean[128];
+    private final boolean[] mNotesOnByPitch = new boolean[128];
 
     // Appearance
     private Paint mShadowPaint;
@@ -97,20 +97,20 @@ public class MusicKeyboardView extends View {
     private Paint mBlackOffKeyPaint;
     private Paint mWhiteOnKeyPaint;
     private Paint mWhiteOffKeyPaint;
-    private boolean mLegato = true;
+    private final boolean mLegato = true;
 
-    private HashMap<Integer, Integer> mFingerMap = new HashMap<Integer, Integer>();
+    private final HashMap<Integer, Integer> mFingerMap = new HashMap<Integer, Integer>();
     // Note number for the left most key.
     private int mLowestPitch = PITCH_MIDDLE_C - NOTES_PER_OCTAVE;
-    private ArrayList<MusicKeyListener> mListeners = new ArrayList<MusicKeyListener>();
+    private final ArrayList<MusicKeyListener> mListeners = new ArrayList<>();
 
     /** Implement this to receive keyboard events. */
     public interface MusicKeyListener {
         /** This will be called when a key is pressed. */
-        public void onKeyDown(int keyIndex);
+        void onKeyDown(int keyIndex);
 
         /** This will be called when a key is pressed. */
-        public void onKeyUp(int keyIndex);
+        void onKeyUp(int keyIndex);
     }
 
     public MusicKeyboardView(Context context, AttributeSet attrs) {
@@ -164,7 +164,7 @@ public class MusicKeyboardView extends View {
 
     private void makeBlackRectangles() {
         int top = 0;
-        ArrayList<Rect> rectangles = new ArrayList<Rect>();
+        ArrayList<Rect> rectangles = new ArrayList<>();
 
         int whiteKeyIndex = 0;
         int blackKeyIndex = 0;
@@ -178,7 +178,7 @@ public class MusicKeyboardView extends View {
                         * BLACK_KEY_HORIZONTAL_OFFSETS[(blackKeyIndex + leftCompl) % 5];
 //                float left = x - mBlackKeyWidth * (0.55f - offset);
                 float left = x - mBlackKeyWidth * (0.55f - offset);
-                left += WHITE_KEY_GAP / 2f;
+                left += WHITE_KEY_GAP / 2;
                 float right = left + mBlackKeyWidth;
                 Rect rect = new Rect(Math.round(left), top, Math.round(right), Math.round(mBlackBottom));
                 rectangles.add(rect);
@@ -191,7 +191,7 @@ public class MusicKeyboardView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         int whiteKeyIndex = 0;
         canvas.drawRect(0, 0, mWidth, mHeight, mShadowPaint);
@@ -223,7 +223,7 @@ public class MusicKeyboardView extends View {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.FROYO)
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
@@ -271,7 +271,8 @@ public class MusicKeyboardView extends View {
 
         // Must return true or we do not get the ACTION_MOVE and
         // ACTION_UP events.
-        return true;
+        return handled; // changed by Narek
+//        return true;
     }
 
     private void onFingerDown(int id, float x, float y) {
@@ -283,7 +284,7 @@ public class MusicKeyboardView extends View {
     private void onFingerMove(int id, float x, float y) {
         Integer previousPitch = mFingerMap.get(id);
         if (previousPitch != null) {
-            int pitch = -1;
+            int pitch;
             if (y < mBlackBottom) {
                 // Only hit black keys if above line.
                 pitch = xyToBlackPitch(x, y);
@@ -362,8 +363,7 @@ public class MusicKeyboardView extends View {
         int whiteKeyIndex = (int) (x / mWhiteKeyWidth) + leftCompl;
         int octave = (whiteKeyIndex) / WHITE_KEY_OFFSETS.length;
         int indexInOctave = whiteKeyIndex - (octave * WHITE_KEY_OFFSETS.length);
-        int pitch = 12 * (octave2 + octave + 1) + WHITE_KEY_OFFSETS[indexInOctave];
-        return pitch;
+        return 12 * (octave2 + octave + 1) + WHITE_KEY_OFFSETS[indexInOctave];
     }
 
     // Convert x to MIDI pitch. Ignores white keys.

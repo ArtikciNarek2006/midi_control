@@ -2,7 +2,8 @@
 <devices>
     <device
         manufacturer="MidiControl"
-        product="Keyboard">
+        product="Keyboard"
+        name="Virtual Keyboard">
 <!--        <input-port name="Input" />-->
             <output-port name="Output" />
     </device>

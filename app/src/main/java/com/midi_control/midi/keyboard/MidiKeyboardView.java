@@ -1,18 +1,18 @@
 package com.midi_control.midi.keyboard;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.midi_control.utils.ML;
 import com.mobileer.miditools.MidiConstants;
-import com.mobileer.miditools.MusicKeyboardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class MidiKeyboardView extends View {
     private static final String TAG = "MidiKeyboardView";
     // Adjust proportions of the keys.
     private static final int PITCH_MIDDLE_C = 60;
-    private static final int WHITE_KEY_GAP = 10;
+    private static final float WHITE_KEY_GAP = 10f;
     private static final int NOTES_PER_OCTAVE = 12;
     private static final int[] WHITE_KEY_OFFSETS = {
             0, 2, 4, 5, 7, 9, 11
@@ -70,7 +70,7 @@ public class MidiKeyboardView extends View {
     private Rect[] mBlackKeyRectangles;
 
     // Keyboard state
-    private boolean[] mNotesOnByPitch = new boolean[128];
+    private final boolean[] mNotesOnByPitch = new boolean[128];
 
     // Appearance
     private Paint mShadowPaint;
@@ -80,48 +80,42 @@ public class MidiKeyboardView extends View {
     private Paint mWhiteOffKeyPaint;
     private boolean mLegato = true;
 
-    private HashMap<Integer, Integer> mFingerMap = new HashMap<Integer, Integer>();
+    private final HashMap<Integer, Integer> mFingerMap = new HashMap<>();
     // Note number for the left most key.
     private int mLowestPitch = PITCH_MIDDLE_C - NOTES_PER_OCTAVE;
-    private ArrayList<com.mobileer.miditools.MusicKeyboardView.MusicKeyListener> mListeners = new ArrayList<com.mobileer.miditools.MusicKeyboardView.MusicKeyListener>();
+    private final ArrayList<MusicKeyListener> mListeners = new ArrayList<>();
 
-    private MidiKeyboardService mkService;
 
-    /**
-     * Implement this to receive keyboard events.
-     */
     public interface MusicKeyListener {
-        /**
-         * This will be called when a key is pressed.
-         */
-        public void onKeyDown(int keyIndex);
-
-        /**
-         * This will be called when a key is pressed.
-         */
-        public void onKeyUp(int keyIndex);
+        void onKeyDown(int keyIndex);
+        void onKeyUp(int keyIndex);
     }
 
+    public void bindToMidiKeyboardService() {
+        this.unbindFromMidiKeyboardService();
+        this.addMusicKeyListener(new MusicKeyListener() {
+            @Override
+            public void onKeyDown(int keyIndex) {
+                ML.log(TAG, "onKeyDown(" + keyIndex + ")");
+                MidiKeyboardService.broadcast(MidiConstants.STATUS_NOTE_ON, (byte) keyIndex);
+            }
+
+            @Override
+            public void onKeyUp(int keyIndex) {
+                ML.log(TAG, "onKeyUp(" + keyIndex + ")");
+                MidiKeyboardService.broadcast(MidiConstants.STATUS_NOTE_OFF, (byte) keyIndex);
+            }
+        });
+    }
+
+
+    public void unbindFromMidiKeyboardService(){
+        this.mListeners.clear();
+    }
     public MidiKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
-        // add to listeners MidiKeyboardService
-        mkService = MidiKeyboardService.getInstance();
-        if (mkService == null) {
-            ML.err(TAG, "Constructor(): MidiKeyboardService.getInstance() is null");
-        } else {
-            this.addMusicKeyListener(new MusicKeyboardView.MusicKeyListener() {
-                @Override
-                public void onKeyDown(int keyIndex) {
-                    mkService.broadcast(MidiConstants.STATUS_NOTE_ON, (byte) keyIndex);
-                }
-
-                @Override
-                public void onKeyUp(int keyIndex) {
-                    mkService.broadcast(MidiConstants.STATUS_NOTE_OFF, (byte) keyIndex);
-                }
-            });
-        }
+        bindToMidiKeyboardService();
     }
 
     void init() {
@@ -170,7 +164,7 @@ public class MidiKeyboardView extends View {
 
     private void makeBlackRectangles() {
         int top = 0;
-        ArrayList<Rect> rectangles = new ArrayList<Rect>();
+        ArrayList<Rect> rectangles = new ArrayList<>();
 
         int whiteKeyIndex = 0;
         int blackKeyIndex = 0;
@@ -186,7 +180,7 @@ public class MidiKeyboardView extends View {
                         * BLACK_KEY_HORIZONTAL_OFFSETS[(blackKeyIndex + leftCompl) % 5];
 //                float left = x - mBlackKeyWidth * (0.55f - offset);
                 float left = x - mBlackKeyWidth * (0.55f - offset);
-                left += WHITE_KEY_GAP / 2f;
+                left += WHITE_KEY_GAP / 2;
                 float right = left + mBlackKeyWidth;
                 Rect rect = new Rect(Math.round(left), top, Math.round(right), Math.round(mBlackBottom));
                 rectangles.add(rect);
@@ -199,7 +193,7 @@ public class MidiKeyboardView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         int whiteKeyIndex = 0;
         canvas.drawRect(0, 0, mWidth, mHeight, mShadowPaint);
@@ -231,7 +225,7 @@ public class MidiKeyboardView extends View {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.FROYO)
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
@@ -279,7 +273,7 @@ public class MidiKeyboardView extends View {
 
         // Must return true or we do not get the ACTION_MOVE and
         // ACTION_UP events.
-        return true;
+        return handled;
     }
 
     private void onFingerDown(int id, float x, float y) {
@@ -291,7 +285,7 @@ public class MidiKeyboardView extends View {
     private void onFingerMove(int id, float x, float y) {
         Integer previousPitch = mFingerMap.get(id);
         if (previousPitch != null) {
-            int pitch = -1;
+            int pitch;
             if (y < mBlackBottom) {
                 // Only hit black keys if above line.
                 pitch = xyToBlackPitch(x, y);
@@ -332,7 +326,7 @@ public class MidiKeyboardView extends View {
     }
 
     private void fireKeyDown(int pitch) {
-        for (com.mobileer.miditools.MusicKeyboardView.MusicKeyListener listener : mListeners) {
+        for (MusicKeyListener listener : mListeners) {
             listener.onKeyDown(pitch);
         }
         mNotesOnByPitch[pitch] = true;
@@ -340,7 +334,7 @@ public class MidiKeyboardView extends View {
     }
 
     private void fireKeyUp(int pitch) {
-        for (com.mobileer.miditools.MusicKeyboardView.MusicKeyListener listener : mListeners) {
+        for (MusicKeyListener listener : mListeners) {
             listener.onKeyUp(pitch);
         }
         mNotesOnByPitch[pitch] = false;
@@ -370,8 +364,7 @@ public class MidiKeyboardView extends View {
         int whiteKeyIndex = (int) (x / mWhiteKeyWidth) + leftCompl;
         int octave = (whiteKeyIndex) / WHITE_KEY_OFFSETS.length;
         int indexInOctave = whiteKeyIndex - (octave * WHITE_KEY_OFFSETS.length);
-        int pitch = 12 * (octave2 + octave + 1) + WHITE_KEY_OFFSETS[indexInOctave];
-        return pitch;
+        return 12 * (octave2 + octave + 1) + WHITE_KEY_OFFSETS[indexInOctave];
     }
 
     // Convert x to MIDI pitch. Ignores white keys.
@@ -392,11 +385,11 @@ public class MidiKeyboardView extends View {
         return result;
     }
 
-    public void addMusicKeyListener(com.mobileer.miditools.MusicKeyboardView.MusicKeyListener musicKeyListener) {
+    public void addMusicKeyListener(MusicKeyListener musicKeyListener) {
         mListeners.add(musicKeyListener);
     }
 
-    public void removeMusicKeyListener(com.mobileer.miditools.MusicKeyboardView.MusicKeyListener musicKeyListener) {
+    public void removeMusicKeyListener(MusicKeyListener musicKeyListener) {
         mListeners.remove(musicKeyListener);
     }
 
@@ -410,5 +403,33 @@ public class MidiKeyboardView extends View {
         }
         mLowestPitch = pitch;
         postInvalidate();
+    }
+
+    public int getLowestPitch() {
+        return mLowestPitch;
+    }
+
+    /**
+     * Set the number of white keys in portrait mode.
+     */
+    public void setNumPortraitKeys(int numPortraitKeys) {
+        mNumPortraitKeys = numPortraitKeys;
+        postInvalidate();
+    }
+
+    public int getNumPortraitKeys() {
+        return mNumPortraitKeys;
+    }
+
+    /**
+     * Set the number of white keys in landscape mode.
+     */
+    public void setNumLandscapeKeys(int numLandscapeKeys) {
+        mNumLandscapeKeys = numLandscapeKeys;
+        postInvalidate();
+    }
+
+    public int getNumLandscapeKeys() {
+        return mNumLandscapeKeys;
     }
 }

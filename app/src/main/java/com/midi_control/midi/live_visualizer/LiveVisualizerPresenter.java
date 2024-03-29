@@ -9,7 +9,7 @@ import com.midi_control.utils.MyBuffer;
 
 public class LiveVisualizerPresenter implements MidiVisualizerContract.Presenter, LiveVisualizerContract.LiveVisPresenter {
     public static final String TAG = "LiveVisualizerPresenter";
-    public static int MIDI_MESSAGES_BUFFER_LENGTH = 1000;
+    public static int MIDI_MESSAGES_BUFFER_LENGTH = 700;
 
     public MyBuffer<MidiNote> midiNotesBuffer = new MyBuffer<>(MIDI_MESSAGES_BUFFER_LENGTH);
     private MidiVisualizerView visView;
@@ -21,6 +21,7 @@ public class LiveVisualizerPresenter implements MidiVisualizerContract.Presenter
 
     public void setVisView(MidiVisualizerView visView) {
         this.visView = visView;
+        updateViewsNotesBuffer();
     }
 
     private void updateViewsNotesBuffer() {
@@ -36,7 +37,6 @@ public class LiveVisualizerPresenter implements MidiVisualizerContract.Presenter
     public void receiveMidiMessage(MidiMessage midiMessage) {
         if (midiMessage != null) {
             if (midiMessage.noteStatus != null) {
-                ML.log(TAG, "send update");
                 boolean is_new_note_status = true;
                 for (MidiNote note : midiNotesBuffer.getLinkedList().toArray(new MidiNote[0])) {
                     if (note != null) {
