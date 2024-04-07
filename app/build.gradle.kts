@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.midi_control"
+    namespace = "com.midi_control.midi_tiles"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.midi_control"
+        applicationId = "com.midi_control.midi_tiles"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

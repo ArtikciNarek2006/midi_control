@@ -26,7 +26,7 @@
             android:contentDescription="@string/back_button_content" />
     </LinearLayout>
 
-    <com.midi_control.midi.visualizer.MidiVisualizerView
+    <com.midi_control.midi_tiles.midi.visualizer.MidiVisualizerView
         android:layout_weight="7"
         android:id="@+id/visualizerView"
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:background="@color/bg_accent_2" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:name="com.midi_control.midi.keyboard.MidiKeyboardFragment"
+        android:name="com.midi_control.midi_tiles.midi.keyboard.MidiKeyboardFragment"
         android:layout_weight="3"
         android:id="@+id/midi_keyboard_view_container"
         android:layout_height="0dp"

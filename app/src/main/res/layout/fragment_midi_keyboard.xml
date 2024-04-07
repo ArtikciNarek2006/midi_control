@@ -10,7 +10,7 @@
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="match_parent" />-->
 
-    <com.midi_control.midi.keyboard.MidiKeyboardView
+    <com.midi_control.midi_tiles.midi.keyboard.MidiKeyboardView
         android:id="@+id/midi_keyboard_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
