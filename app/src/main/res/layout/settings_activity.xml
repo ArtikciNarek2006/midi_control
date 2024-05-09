@@ -1,14 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
-        android:layout_height="wrap_content"
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:text="@string/title_activity_settings"
-        android:gravity="center"
-        android:textSize="@dimen/titles_font_size"
-        android:layout_margin="@dimen/titles_margin"/>
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:navigationIconTint="?colorOnPrimary"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        app:title="@string/title_activity_settings"
+        app:titleMarginStart="16dp" />
+
 
     <FrameLayout
         android:id="@+id/settings"

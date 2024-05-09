@@ -1,7 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MidiControl" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary_light</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant_light</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary_light</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant_light</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary_light</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/status_bar_color_light</item>
+        <!-- Customize your theme here. -->
     </style>
 
     <style name="Theme.MidiControl" parent="Base.Theme.MidiControl" />
@@ -12,5 +21,17 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
+    <style name="myActionButtonStyle" parent="Widget.AppCompat.ActionButton">
+        <item name="android:minWidth">5dp</item>
+        <item name="android:maxWidth">10dp</item>
+        <item name="android:width">10dp</item>
+    </style>
+    <style name="ToolbarMinified" parent="Theme.MidiControl">
+        <item name="android:textColorSecondary">?attr/colorOnSecondary</item>
+        <item name="android:actionButtonStyle">@style/myActionButtonStyle</item>
+        <item name="actionButtonStyle">@style/myActionButtonStyle</item>
     </style>
 </resources>

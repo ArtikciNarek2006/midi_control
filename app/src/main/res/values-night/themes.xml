@@ -1,12 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MidiControl" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary_dark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant_dark</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary_dark</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant_dark</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary_dark</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/status_bar_color_dark</item>
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 
-    <style name="ThemeOverlay.MidiControl.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
-        <item name="fullscreenTextColor">@color/light_blue_A400</item>
-    </style>
 </resources>

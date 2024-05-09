@@ -15,23 +15,24 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="false"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="false"
         android:theme="@style/Theme.MidiControl"
         tools:targetApi="31">
         <activity
             android:name=".app.FreePlayActivity"
             android:exported="false"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="userLandscape" />
         <activity
             android:name=".app.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="unspecified" />
+            android:screenOrientation="userLandscape" />
         <activity
             android:name=".app.MainActivity"
             android:exported="true"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="userLandscape">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

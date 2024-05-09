@@ -6,11 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".app.MainActivity">
 
-    <Button android:layout_height="wrap_content" android:layout_width="wrap_content"
-        tools:ignore="MissingConstraints"
-        android:id="@+id/btn" android:text="fp">
 
-    </Button>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/MainToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingLeft="16dp"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIconTint="?colorOnPrimary"
+        app:title="@string/app_name"
+        app:titleMarginStart="16dp" />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/MainMenu_live_playing_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MainToolbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

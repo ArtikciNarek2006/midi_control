@@ -1,18 +1,17 @@
 package com.midi_control.midi_tiles.app;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.midi_control.midi_tiles.R;
 import com.midi_control.midi_tiles.databinding.ActivityFreePlayBinding;
 import com.midi_control.midi_tiles.midi.MyMidiController;
 
 public class FreePlayActivity extends AppCompatActivity {
-
     public MyMidiController myMidiController;
 
     @Override
@@ -21,19 +20,25 @@ public class FreePlayActivity extends AppCompatActivity {
         com.midi_control.midi_tiles.databinding.ActivityFreePlayBinding binding = ActivityFreePlayBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ImageButton main_menu_btn = findViewById(R.id.main_menu_btn);
 
         myMidiController = MyMidiController.getInstance(this);
-        if(myMidiController != null){
+        if (myMidiController != null) {
             myMidiController.setState(MyMidiController.State.LiveVisualizer, this, R.id.visualizerView);
         }
 
+        setSupportActionBar(findViewById(R.id.toolbar));
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+    }
 
-        main_menu_btn.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
-        });
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

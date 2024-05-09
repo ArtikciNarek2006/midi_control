@@ -2,10 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="light_blue_600">#FF039BE5</color>
-    <color name="light_blue_900">#FF01579B</color>
-    <color name="light_blue_A200">#FF40C4FF</color>
-    <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
 
     <color name="bg_accent_1">#202020</color>
@@ -13,5 +9,34 @@
     <color name="bg_accent_3">#373737</color>
     <color name="bg_accent_4">#474747</color>
     <color name="bg_accent_5">#575757</color>
+    <color name="fg_accent_1">#ffffff</color>
+    <color name="fg_accent_2">#e0e0e0</color>
+    <color name="fg_accent_3">#cccccc</color>
+    <color name="fg_accent_4">#bbbbbb</color>
+    <color name="fg_accent_5">#aaaaaa</color>
+
+
+    <!--  BaseTheme light  -->
+
+    <color name="colorPrimary_light">@color/fg_accent_5</color>
+    <color name="colorPrimaryVariant_light">@color/fg_accent_4</color>
+    <color name="colorOnPrimary_light">@color/bg_accent_1</color>
+
+    <color name="colorSecondaryVariant_light">@color/fg_accent_2</color>
+    <color name="colorOnSecondary_light">@color/bg_accent_2</color>
+
+    <color name="status_bar_color_light">@color/fg_accent_3</color>
+
+
+    <!--  BaseTheme dark  -->
+    <color name="colorPrimary_dark">@color/bg_accent_4</color>
+    <color name="colorPrimaryVariant_dark">@color/bg_accent_5</color>
+    <color name="colorOnPrimary_dark">@color/fg_accent_1</color>
+
+    <color name="colorSecondaryVariant_dark">@color/bg_accent_3</color>
+    <color name="colorOnSecondary_dark">@color/fg_accent_2</color>
+
+    <color name="status_bar_color_dark">@color/bg_accent_2</color>
+
 
 </resources>
