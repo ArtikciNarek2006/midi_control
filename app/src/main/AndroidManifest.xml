@@ -43,39 +43,25 @@
 
         <!-- MidiSynthService definition -->
         <service
-            android:name=".midi.services.mobileer_synth.MidiSynthService"
-            android:exported="true"
+            android:name=".midi.mobileer_synth.MidiSynthService"
+            android:exported="false"
             android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">
-            <intent-filter>
-                <action android:name="android.media.midi.MidiDeviceService" />
-            </intent-filter>
-
+<!--            <intent-filter>-->
+<!--                <action android:name="android.media.midi.MidiDeviceService" />-->
+<!--            </intent-filter>-->
             <meta-data
                 android:name="android.media.midi.MidiDeviceService"
                 android:resource="@xml/midi_synth_service_device_info" />
         </service>
 
-        <!-- MidiSynthService2 definition -->
-        <!--        <service-->
-        <!--            android:name=".midi.services.nativeGMSynth.MidiNativeSynthService"-->
-        <!--            android:exported="true"-->
-        <!--            android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE" >-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.media.midi.MidiDeviceService" />-->
-        <!--            </intent-filter>-->
-        <!--            <meta-data-->
-        <!--                android:name="android.media.midi.MidiDeviceService"-->
-        <!--                android:resource="@xml/midi_native_synth_service_device_info" />-->
-        <!--        </service> -->
-
         <!-- MidiLiveVisualizerService definition -->
         <service
             android:name=".midi.live_visualizer.MidiLiveVisualizerService"
-            android:exported="true"
+            android:exported="false"
             android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">
-            <intent-filter>
-                <action android:name="android.media.midi.MidiDeviceService" />
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.media.midi.MidiDeviceService" />-->
+<!--            </intent-filter>-->
             <meta-data
                 android:name="android.media.midi.MidiDeviceService"
                 android:resource="@xml/midi_live_vis_service_device_info" />

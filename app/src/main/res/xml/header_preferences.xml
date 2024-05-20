@@ -3,13 +3,14 @@
     <Preference
         app:fragment="com.midi_control.midi_tiles.app.SettingsActivity$MidiConnectorsFragment"
         app:icon="@drawable/midi_plug"
-        app:key="@string/midi_connectors_header"
-        app:title="@string/midi_connectors_header" />
+        app:key="midi_connectors"
+        app:title="@string/midi_connectors_header_preference" />
+
 
     <Preference
-        app:fragment="com.midi_control.midi_tiles.app.SettingsActivity$SyncFragment"
-        app:icon="@drawable/sync"
-        app:key="sync_header"
-        app:title="@string/sync_header" />
+        app:fragment="com.midi_control.midi_tiles.app.SettingsActivity$KeyboardVizSettings"
+        app:icon="@drawable/baseline_piano_24"
+        app:key="keyboard_viz"
+        app:title="@string/keyboard_viz_header_preference" />
 
 </PreferenceScreen>

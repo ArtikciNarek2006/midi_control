@@ -113,10 +113,12 @@ public class MidiConnection {
     }
 
     public void safeClose() {
+        ML.log(TAG, "safeClose(): port is open: " + isOpen);
         if (isOpen) {
             try {
                 midiPortConnector.close();
-                isOpen = true;
+                isOpen = false;
+                ML.log(TAG, "safeClose(): port is closed");
             } catch (IOException e) {
                 ML.err(TAG, "safeClose(): cant close connection:" + this);
             }

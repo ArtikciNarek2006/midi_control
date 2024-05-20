@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MidiKeyboardView extends View {
-    private static final String TAG = "MidiKeyboardView";
+    public static final String TAG = "MidiKeyboardView";
     // Adjust proportions of the keys.
-    private static final int PITCH_MIDDLE_C = 60;
+    public static final int PITCH_MIDDLE_C = 60;
     private static final float WHITE_KEY_GAP = 10f;
     private static final int NOTES_PER_OCTAVE = 12;
     private static final int[] WHITE_KEY_OFFSETS = {
@@ -55,9 +55,12 @@ public class MidiKeyboardView extends View {
     };
 
     // Preferences
-    private int mNumKeys;
-    private int mNumPortraitKeys = (3 * NOTES_PER_OCTAVE) + 1;
-    private int mNumLandscapeKeys = (5 * NOTES_PER_OCTAVE) + 1;
+    public static final int DefaultNumKeys = (5 * NOTES_PER_OCTAVE) + 1;
+    public static final int DefaultLowestPitch = PITCH_MIDDLE_C - NOTES_PER_OCTAVE;
+
+    private int mNumKeys = DefaultNumKeys;
+    private int mLowestPitch = DefaultLowestPitch;
+    private boolean mLegato = true;
     private int mNumWhiteKeys;
 
     // Geometry.
@@ -78,16 +81,15 @@ public class MidiKeyboardView extends View {
     private Paint mBlackOffKeyPaint;
     private Paint mWhiteOnKeyPaint;
     private Paint mWhiteOffKeyPaint;
-    private boolean mLegato = true;
 
     private final HashMap<Integer, Integer> mFingerMap = new HashMap<>();
     // Note number for the left most key.
-    private int mLowestPitch = PITCH_MIDDLE_C - NOTES_PER_OCTAVE;
     private final ArrayList<MusicKeyListener> mListeners = new ArrayList<>();
 
 
     public interface MusicKeyListener {
         void onKeyDown(int keyIndex);
+
         void onKeyUp(int keyIndex);
     }
 
@@ -108,10 +110,10 @@ public class MidiKeyboardView extends View {
         });
     }
 
-
-    public void unbindFromMidiKeyboardService(){
+    public void unbindFromMidiKeyboardService() {
         this.mListeners.clear();
     }
+
     public MidiKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -145,7 +147,6 @@ public class MidiKeyboardView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mWidth = w;
         mHeight = h;
-        mNumKeys = (mHeight > mWidth) ? mNumPortraitKeys : mNumLandscapeKeys;
         mNumWhiteKeys = 0;
         // Count white keys.
         for (int i = 0; i < mNumKeys; i++) {
@@ -398,38 +399,26 @@ public class MidiKeyboardView extends View {
      * adjusted upwards to a white key. Forces a redraw.
      */
     public void setLowestPitch(int pitch) {
-        if (isPitchBlack(pitch)) {
-            pitch++; // force to next white key
-        }
+//        if (isPitchBlack(pitch)) {
+//            pitch++; // force to next white key
+//        }
         mLowestPitch = pitch;
         postInvalidate();
+        onSizeChanged((int) mWidth, (int) mHeight, (int) mWidth, (int) mHeight);
     }
 
     public int getLowestPitch() {
         return mLowestPitch;
     }
 
-    /**
-     * Set the number of white keys in portrait mode.
-     */
-    public void setNumPortraitKeys(int numPortraitKeys) {
-        mNumPortraitKeys = numPortraitKeys;
+    public void setNumKeys(int numKeys) {
+        mNumKeys = numKeys;
         postInvalidate();
+        onSizeChanged((int) mWidth, (int) mHeight, (int) mWidth, (int) mHeight);
     }
 
-    public int getNumPortraitKeys() {
-        return mNumPortraitKeys;
+    public int getNumKeys() {
+        return mNumKeys;
     }
 
-    /**
-     * Set the number of white keys in landscape mode.
-     */
-    public void setNumLandscapeKeys(int numLandscapeKeys) {
-        mNumLandscapeKeys = numLandscapeKeys;
-        postInvalidate();
-    }
-
-    public int getNumLandscapeKeys() {
-        return mNumLandscapeKeys;
-    }
 }

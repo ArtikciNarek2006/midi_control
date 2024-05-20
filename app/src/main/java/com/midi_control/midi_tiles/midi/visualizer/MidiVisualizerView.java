@@ -47,7 +47,7 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
 
     public static float DEFAULT_SLIDE_SPEED = 350f;
     public static FlowDirection DEFAULT_FLOW_DIRECTION = FlowDirection.UP;
-    public static MyMath.Cords<Byte> DEFAULT_MIN_MAX_PITCH = new MyMath.Cords<>((byte) 48, (byte) 108);
+    public static MyMath.Cords<Integer> DEFAULT_MIN_MAX_PITCH = new MyMath.Cords<>(48, 108);
 
     private static final float BLACK_KEY_WIDTH_FACTOR = 0.6f, BLACK_KEY_OFFSET_FACTOR = 0.18f;
     private static final
@@ -67,7 +67,7 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
     private final MidiNote[] note_buffer_empty_ref = new MidiNote[0];
     private FlowDirection flowDirection;
     private float pxPerSec;
-    private MyMath.Cords<Byte> minMaxPitches;
+    private MyMath.Cords<Integer> minMaxPitches;
 
     private float mWhiteKeyWidth = 1, mBlackKeyWidth = 1;
 
@@ -171,7 +171,8 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
                     Paint note_paint;
                     x1 += WHITE_KEY_LEFT_COMPLEMENTS[draw_pitch] * mWhiteKeyWidth;
                     if (isBlackKey(note.pitch)) {
-                        float offset = BLACK_KEY_OFFSET_FACTOR * BLACK_KEY_HORIZONTAL_OFFSETS[BLACK_KEY_INDEX[draw_pitch]];
+                        int temp_i = BLACK_KEY_INDEX[draw_pitch];
+                        float offset = BLACK_KEY_OFFSET_FACTOR * BLACK_KEY_HORIZONTAL_OFFSETS[temp_i];
                         x1 = x1 - mBlackKeyWidth * (0.5f - offset);
                         x2 = x1 + mBlackKeyWidth;
 
@@ -244,12 +245,14 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
     }
 
     @Override
-    public void setMinMaxPitches(MyMath.Cords<Byte> cords) {
+    public void setMinMaxPitches(MyMath.Cords<Integer> cords) {
         this.minMaxPitches = cords;
+        postInvalidate();
+        onSizeChanged((int) canvas_w, (int) canvas_h, (int) canvas_w, (int) canvas_h);
     }
 
     @Override
-    public MyMath.Cords<Byte> getMinMaxPitches() {
+    public MyMath.Cords<Integer> getMinMaxPitches() {
         return minMaxPitches;
     }
 }

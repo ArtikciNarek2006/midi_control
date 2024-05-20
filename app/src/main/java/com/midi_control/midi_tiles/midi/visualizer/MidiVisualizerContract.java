@@ -18,8 +18,8 @@ public interface MidiVisualizerContract {
         float getSlideSpeed(); // returns pxPerSec
 
 
-        void setMinMaxPitches(MyMath.Cords<Byte> coefficients);
-        MyMath.Cords<Byte> getMinMaxPitches();
+        void setMinMaxPitches(MyMath.Cords<Integer> coefficients);
+        MyMath.Cords<Integer> getMinMaxPitches();
         // for other
     }
 

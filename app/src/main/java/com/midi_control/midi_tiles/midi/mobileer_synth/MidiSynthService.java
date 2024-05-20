@@ -1,4 +1,4 @@
-package com.midi_control.midi_tiles.midi.services.mobileer_synth;
+package com.midi_control.midi_tiles.midi.mobileer_synth;
 
 import android.content.Context;
 import android.media.AudioManager;

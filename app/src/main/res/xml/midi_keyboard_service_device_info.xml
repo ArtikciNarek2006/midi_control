@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <devices>
     <device
+        name="Virtual Keyboard"
         manufacturer="MidiControl"
-        product="Keyboard"
-        name="Virtual Keyboard">
-<!--        <input-port name="Input" />-->
-            <output-port name="Output" />
+        product="Keyboard">
+        <input-port name="Input" />
+        <output-port name="Output" />
     </device>
 </devices>

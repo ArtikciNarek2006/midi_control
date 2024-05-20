@@ -21,10 +21,15 @@ import android.media.midi.MidiManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Locale;
+
 /**
  * Miscellaneous tools for Android MIDI.
  */
 public class MidiTools {
+    private static boolean is_null(String str) {
+        return (str == null) || (str.toLowerCase(Locale.ROOT).equals("null"));
+    }
 
     /**
      * @return a device that matches the manufacturer and product or null
@@ -34,9 +39,9 @@ public class MidiTools {
                                             String manufacturer, String product) {
         for (MidiDeviceInfo info : midiManager.getDevices()) {
             String deviceManufacturer = info.getProperties().getString(MidiDeviceInfo.PROPERTY_MANUFACTURER);
-            if ((manufacturer != null) && manufacturer.equals(deviceManufacturer)) {
+            if ((is_null(manufacturer) && is_null(deviceManufacturer)) || ((manufacturer != null) && manufacturer.equals(deviceManufacturer))) {
                 String deviceProduct = info.getProperties().getString(MidiDeviceInfo.PROPERTY_PRODUCT);
-                if ((product != null) && product.equals(deviceProduct)) {
+                if ((is_null(product) && is_null(deviceProduct)) || ((product != null) && product.equals(deviceProduct))) {
                     return info;
                 }
             }

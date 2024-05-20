@@ -7,4 +7,6 @@
     <dimen name="status_bar_height">35dp</dimen>
 
     <dimen name="keyboard_height">120dp</dimen>
+    <dimen name="min_spinner_height">33dp</dimen>
+    <dimen name="spinner_gap">7dp</dimen>
 </resources>

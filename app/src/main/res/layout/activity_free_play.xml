@@ -10,17 +10,19 @@
     tools:context=".app.FreePlayActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_weight="7"
+        android:id="@+id/free_play_toolbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="7"
         android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
         android:elevation="4dp"
         android:padding="0dp"
-        android:theme="?attr/actionBarTheme"
+        android:theme="@style/ToolbarMinified"
         app:navigationIcon="@drawable/baseline_arrow_back_24"
-        app:navigationIconTint="?colorOnPrimary"
-        app:titleMarginStart="16dp" />
+        app:navigationIconTint="?attr/colorOnPrimary"
+        app:titleMarginStart="16dp"
+        app:menu="@menu/free_play_activity_toolbar" />
 
 
     <com.midi_control.midi_tiles.midi.visualizer.MidiVisualizerView

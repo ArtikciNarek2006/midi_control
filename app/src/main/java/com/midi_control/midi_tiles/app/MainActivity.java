@@ -6,8 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,12 +23,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myMidiController = MyMidiController.getInstance(this);
+        assert myMidiController != null;
+        myMidiController.setState(MyMidiController.State.UNDEFINED, this, null);
+
         Toolbar toolbar = findViewById(R.id.MainToolbar);
 
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.main_activity_toolbar);
+
         toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.menu_main_setting){
+            if (item.getItemId() == R.id.menu_main_activity_settings){
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
             }

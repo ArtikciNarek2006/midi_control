@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_main_activity_settings"
+        android:id="@+id/menu_free_play_settings"
         android:icon="@drawable/settings_24"
         android:orderInCategory="100"
         app:showAsAction="always"

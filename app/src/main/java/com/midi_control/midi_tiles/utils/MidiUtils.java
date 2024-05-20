@@ -22,7 +22,7 @@ public class MidiUtils {
         return (byte) (status_code & MidiConstants.STATUS_COMMAND_MASK);
     }
 
-    public static boolean isBlackKey(byte pitch){
+    public static boolean isBlackKey(int pitch){
         final boolean[] NOTE_IN_OCTAVE_IS_BLACK = {
                 false, true,
                 false, true,
@@ -40,9 +40,9 @@ public class MidiUtils {
      * @param max_pitch inclusive
      * @return count of white notes
      */
-    public static int countWhiteKeys(byte min_pitch, byte max_pitch){
+    public static int countWhiteKeys(int min_pitch, int max_pitch){
         int count = 0;
-        for (byte i = min_pitch; i <= max_pitch; i++) {
+        for (int i = min_pitch; i <= max_pitch; i++) {
             if (!isBlackKey(i)){
                 count++;
             }
