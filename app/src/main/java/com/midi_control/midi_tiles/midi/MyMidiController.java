@@ -98,11 +98,12 @@ public class MyMidiController extends MidiManager.DeviceCallback implements Seri
     private MidiKeyboardView currentKeyboardView;
 
     public MyMidiController(@NonNull Activity ctx) {
+        sharedPreferences = ctx.getSharedPreferences(TAG, Context.MODE_PRIVATE);
+        SettingsContainer.load_preferences(sharedPreferences);
+
         midiManager = (MidiManager) ctx.getSystemService(Context.MIDI_SERVICE);
         midiConnectionsManager = new MidiConnectionsManager(midiManager);
         midiDeviceMonitor = MidiDeviceMonitor.getInstance(midiManager);
-        sharedPreferences = ctx.getSharedPreferences(TAG, Context.MODE_PRIVATE);
-        SettingsContainer.load_preferences(sharedPreferences);
     }
 
 

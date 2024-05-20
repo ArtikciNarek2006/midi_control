@@ -104,7 +104,7 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
 
     private void init_draw() {
         int length = whiteNotesPaint_ch.length / 2;
-        float h_step = 360f / length, h = 135f, s1 = 0.80f, vWh = 0.95f, s2 = 0.50f, vBl = 0.65f;
+        float h_step = 360f / length, h = 135f, s1 = 0.80f, vWh = 1f, s2 = 0.50f, vBl = 0.55f;
         for (int i = 0; i < length; i++) {
             whiteNotesPaint_ch[i] = new Paint(Paint.ANTI_ALIAS_FLAG);
             whiteNotesPaint_ch[i + length] = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -246,9 +246,11 @@ public class MidiVisualizerView extends View implements MidiVisualizerContract.V
 
     @Override
     public void setMinMaxPitches(MyMath.Cords<Integer> cords) {
-        this.minMaxPitches = cords;
-        postInvalidate();
-        onSizeChanged((int) canvas_w, (int) canvas_h, (int) canvas_w, (int) canvas_h);
+        if ((cords.x % 12 == 0) && (cords.y % 12 == 1)) {
+            this.minMaxPitches = cords;
+            postInvalidate();
+            onSizeChanged((int) canvas_w, (int) canvas_h, (int) canvas_w, (int) canvas_h);
+        }
     }
 
     @Override

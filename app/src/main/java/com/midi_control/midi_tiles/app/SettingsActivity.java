@@ -179,6 +179,7 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             slide_speed = findPreference("visualiser_slide_speed");
             min_pitch = findPreference("keyboard_min_pitch");
             num_keys = findPreference("keyboard_num_notes");
+
             slide_speed.setMin(50);
             slide_speed.setMax(1000);
             slide_speed.setValue(SettingsContainer.visViewSlideSpeed.intValue());

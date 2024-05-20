@@ -402,9 +402,11 @@ public class MidiKeyboardView extends View {
 //        if (isPitchBlack(pitch)) {
 //            pitch++; // force to next white key
 //        }
-        mLowestPitch = pitch;
-        postInvalidate();
-        onSizeChanged((int) mWidth, (int) mHeight, (int) mWidth, (int) mHeight);
+        if ((pitch % 12) == 0) {
+            mLowestPitch = pitch;
+            postInvalidate();
+            onSizeChanged((int) mWidth, (int) mHeight, (int) mWidth, (int) mHeight);
+        }
     }
 
     public int getLowestPitch() {
@@ -412,9 +414,11 @@ public class MidiKeyboardView extends View {
     }
 
     public void setNumKeys(int numKeys) {
-        mNumKeys = numKeys;
-        postInvalidate();
-        onSizeChanged((int) mWidth, (int) mHeight, (int) mWidth, (int) mHeight);
+        if (numKeys % 12 == 1) {
+            mNumKeys = numKeys;
+            postInvalidate();
+            onSizeChanged((int) mWidth, (int) mHeight, (int) mWidth, (int) mHeight);
+        }
     }
 
     public int getNumKeys() {

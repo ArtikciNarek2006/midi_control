@@ -44,11 +44,11 @@
         <!-- MidiSynthService definition -->
         <service
             android:name=".midi.mobileer_synth.MidiSynthService"
-            android:exported="false"
+            android:exported="true"
             android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.media.midi.MidiDeviceService" />-->
-<!--            </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.media.midi.MidiDeviceService" />
+            </intent-filter>
             <meta-data
                 android:name="android.media.midi.MidiDeviceService"
                 android:resource="@xml/midi_synth_service_device_info" />
@@ -57,11 +57,11 @@
         <!-- MidiLiveVisualizerService definition -->
         <service
             android:name=".midi.live_visualizer.MidiLiveVisualizerService"
-            android:exported="false"
+            android:exported="true"
             android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.media.midi.MidiDeviceService" />-->
-<!--            </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.media.midi.MidiDeviceService" />
+            </intent-filter>
             <meta-data
                 android:name="android.media.midi.MidiDeviceService"
                 android:resource="@xml/midi_live_vis_service_device_info" />
